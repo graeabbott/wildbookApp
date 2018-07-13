@@ -1,5 +1,7 @@
 package com.example.affanfarid.myapplication1;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -33,8 +35,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.File;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final int CAMERA_PIC_REQUEST = 1337;
+    public static final int CAMERA_PERMISSION_REQUEST_CODE = 8675309;
     private TextView mTextMessage;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -72,10 +78,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void cameraButton(View v){
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+    }
 
-    public void onButtonTap(View v){
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+
+    public void onTakePhotoClick(View v){
+        if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+
+            onButtonTap();
+        }
+        else{
+            String[] permissionRequest = {Manifest.permission.CAMERA};
+            requestPermissions(permissionRequest, CAMERA_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_PERMISSION_REQUEST_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                onButtonTap();
+            }
+            else{
+                Toast.makeText(this,"cant take photo without permission", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public void onButtonTap(){
+
+        Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+
+        //File pictureDirectory = Enviornment.getExternalSt
+
+
+
+
         startActivity(intent);
+
+//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+//        startActivity(intent);
 
 //        Toast myToast = Toast.makeText(getApplicationContext(),"Text", Toast.LENGTH_LONG);
 //        if (myToast == null || myToast.getView().getWindowVisibility() != View.VISIBLE) {
