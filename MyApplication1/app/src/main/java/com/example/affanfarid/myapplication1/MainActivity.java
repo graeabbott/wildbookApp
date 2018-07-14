@@ -4,10 +4,16 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int CAMERA_PIC_REQUEST = 1337;
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 8675309;
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 10;
     private TextView mTextMessage;
+
+
+    private Button locationButton;
+    private TextView locationText;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -67,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +90,78 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        getLocation();
         //navigation.setTranslucentNavigationEnabled(true);
 
     }
 
+    public void getLocation() {
+        locationButton = (Button) findViewById(R.id.locationButton);
+        locationText = (TextView) findViewById(R.id.locationText);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                locationText.append("\n" + location.getLatitude() + " " + location.getLatitude() );
+            }
 
-    public void cameraButton(View v){
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
+            }
+        };
+
+        int locationRefreshRate = 5000; //in milliseconds
+        int minDistance = 5; //minimum distance change for location to update, in meters
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET
+
+                }, LOCATION_PERMISSION_REQUEST_CODE);
+                return;
+            }
+
+        }else{
+            //configureButton();
+            locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+        }
+
+        locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+
+
+
     }
+
+    private void configureButton(){
+        final int locationRefreshRate = 5000; //in milliseconds
+        final int minDistance = 5; //minimum distance change for location to update, in meters
+
+        locationButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+                locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+            }
+
+
+        });
+
+        //locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+    }
+
 
 
     public void onTakePhotoClick1(){
@@ -124,6 +200,17 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"cant take photo without permission", Toast.LENGTH_LONG).show();
             }
         }
+
+        if(requestCode==LOCATION_PERMISSION_REQUEST_CODE){
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                configureButton();
+            }
+            else{
+                Toast.makeText(this,"cant get location without permission", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
     }
 
     public void onButtonTap(){
