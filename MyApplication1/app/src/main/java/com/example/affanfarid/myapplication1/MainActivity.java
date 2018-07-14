@@ -1,7 +1,9 @@
 package com.example.affanfarid.myapplication1;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_camera:
                     mTextMessage.setText(R.string.title_camera);
+                    onTakePhotoClick1();
                     return true;
                 case R.id.navigation_gallery:
                     mTextMessage.setText(R.string.title_gallery);
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
-    //test1
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +86,19 @@ public class MainActivity extends AppCompatActivity {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, CAMERA_PIC_REQUEST);
     }
+
+
+    public void onTakePhotoClick1(){
+        if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+
+            onButtonTap();
+        }
+        else{
+            String[] permissionRequest = {Manifest.permission.CAMERA};
+            requestPermissions(permissionRequest, CAMERA_PERMISSION_REQUEST_CODE);
+        }
+    }
+
 
 
     public void onTakePhotoClick(View v){
@@ -114,34 +131,25 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 
-        //File pictureDirectory = Enviornment.getExternalSt
 
-
+//        File pictureDirectory = Enviornment.getExternalStoragePublicDirectory(Enviornment.DIRECTORY_PICTURES);
+//
+//        String imageName = getPictureName();
+//        File imageFile = new File(pictureDirectory, imageName);
+//
+//        Uri pictureUri = Uri.fromFile(imageFile);
+//
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
 
 
         startActivity(intent);
 
-//        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//        startActivity(intent);
 
-//        Toast myToast = Toast.makeText(getApplicationContext(),"Text", Toast.LENGTH_LONG);
-//        if (myToast == null || myToast.getView().getWindowVisibility() != View.VISIBLE) {
-//            myToast.setDuration(2);
-//            myToast.show();
-//        }
-//        //else myToast.
-//
-//        //myToast.show();
     }
 
-//    static final int REQUEST_IMAGE_CAPTURE = 1;
-//
-//    public void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//        }
-//    }
+
+
+
 
 
 
