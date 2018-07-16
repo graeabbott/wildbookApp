@@ -46,9 +46,15 @@ import android.widget.Toast;
 
 import java.io.File;
 
+//TODO:
+//Make all the methods private and use the Onclick method
+//
+//
+//
+
 public class MainActivity extends AppCompatActivity {
 
-    private static final int CAMERA_PIC_REQUEST = 1337;
+
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 8675309;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 10;
     private TextView mTextMessage;
@@ -58,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView locationText;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private final int locationRefreshRate = 5000; //in milliseconds
+    private final int minDistance = 5; //minimum distance change for location to update, in meters
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -70,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_camera:
                     mTextMessage.setText(R.string.title_camera);
-                    onTakePhotoClick1();
+                    onTakePhotoClick_Menu();
                     return true;
                 case R.id.navigation_gallery:
                     mTextMessage.setText(R.string.title_gallery);
-                    goToAlbum();
+                    goToAlbum_Menu();
                     return true;
             }
             return false;
@@ -82,6 +90,30 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == CAMERA_PERMISSION_REQUEST_CODE){
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                cameraStart();
+            }
+            else{
+                Toast.makeText(this,"cant take photo without permission", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if(requestCode==LOCATION_PERMISSION_REQUEST_CODE){
+            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                onLocationClick();
+            }
+            else{
+                Toast.makeText(this,"cant get location without permission", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void goToAlbum(){
+    public void goToAlbum_Menu(){
         Intent startAlbumActivity = new Intent(this, albumActivity.class);
         startActivity(startAlbumActivity);
 
@@ -110,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                //locationText = (TextView) f
+
                 locationText.setText("\n" + location.getLongitude() + " " + location.getLatitude() );
             }
 
@@ -131,8 +163,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        int locationRefreshRate = 5000; //in milliseconds
-        int minDistance = 5; //minimum distance change for location to update, in meters
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -144,39 +174,43 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }else{
-            //configureButton();
-            locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+
+            requestLocation();
+
         }
 
-        locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+        requestLocation();
 
 
 
     }
 
-    private void configureButton(){
-        final int locationRefreshRate = 5000; //in milliseconds
-        final int minDistance = 5; //minimum distance change for location to update, in meters
+    private void onLocationClick(){
 
         locationButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
 
-                locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+                requestLocation();
+
             }
 
 
         });
 
-        //locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+
     }
 
 
+    private void requestLocation(){
+        locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
+    }
 
-    public void onTakePhotoClick1(){
+    public void onTakePhotoClick_Menu(){
         if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
 
-            onButtonTap();
+            cameraStart();
+            //onButtonTap();
         }
         else{
             String[] permissionRequest = {Manifest.permission.CAMERA};
@@ -186,10 +220,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public void onTakePhotoClick(View v){
+    public void onTakePhotoClick_Button(View v){
         if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
 
-            onButtonTap();
+            cameraStart();
+            //onButtonTap();
         }
         else{
             String[] permissionRequest = {Manifest.permission.CAMERA};
@@ -198,36 +233,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == CAMERA_PERMISSION_REQUEST_CODE){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                onButtonTap();
-            }
-            else{
-                Toast.makeText(this,"cant take photo without permission", Toast.LENGTH_LONG).show();
-            }
-        }
 
-        if(requestCode==LOCATION_PERMISSION_REQUEST_CODE){
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                configureButton();
-            }
-            else{
-                Toast.makeText(this,"cant get location without permission", Toast.LENGTH_LONG).show();
-            }
 
-        }
-
-    }
-
-    public void onButtonTap(){
+    public void cameraStart(){
 
         Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-
-
+//
+//        WRITE IMAGE SAVING CODE HERE
+//
 //        File pictureDirectory = Enviornment.getExternalStoragePublicDirectory(Enviornment.DIRECTORY_PICTURES);
 //
 //        String imageName = getPictureName();
