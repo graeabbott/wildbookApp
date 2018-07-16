@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
@@ -309,8 +310,10 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
 
     private void dispatchTakePictureIntent() {
+        System.out.println("test");
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
+        System.out.println(takePictureIntent.resolveActivity(getPackageManager()));
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             System.out.println("before");
@@ -324,11 +327,21 @@ public class MainActivity extends AppCompatActivity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                System.out.println("file created");
+                System.out.println(takePictureIntent.resolveActivity(getPackageManager()) == null);
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+               //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                takePictureIntent.putExtra("IMAGEURI", photoURI.toString());
+
+                System.out.println("marker1");
+                System.out.println(takePictureIntent.resolveActivity(getPackageManager()) == null);
+
+
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                System.out.println("marker2");
+                System.out.println(takePictureIntent.resolveActivity(getPackageManager()) == null);
             }
         }
     }
@@ -352,19 +365,41 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        System.out.println("marker2.5");
+
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
+            System.out.println("marker3");
+
+
             if (data != null){
+
+                System.out.println("marker4");
+
+
                 Bundle extras = data.getExtras();
+
+                System.out.println("marker5");
+
+                //Uri uri = Uri.parse(extras.getString("IMAGEURI"));
+                //Bitmap myImg = BitmapFactory.decodeFile(uri.getPath());
+                //mImageView.setImageBitmap(myImg);
+
+
+
+
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, thumbnailHeight, thumbnailHeight);
+//
+//                //ExifInterface ei = new ExifInterface(imageBitmap.getImageUri());
 
-                //ExifInterface ei = new ExifInterface(imageBitmap.getImageUri());
 
-
+                System.out.println("marker6");
 
 
                 mImageView.setImageBitmap(imageBitmap);
+                //mImageView.setImageBitmap(myImg);
             }
 
 
