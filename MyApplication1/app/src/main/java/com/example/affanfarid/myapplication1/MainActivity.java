@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_gallery:
                     mTextMessage.setText(R.string.title_gallery);
+                    goToAlbum();
                     return true;
             }
             return false;
@@ -94,6 +95,13 @@ public class MainActivity extends AppCompatActivity {
         //navigation.setTranslucentNavigationEnabled(true);
 
     }
+
+    public void goToAlbum(){
+        Intent startAlbumActivity = new Intent(this, albumActivity.class);
+        startActivity(startAlbumActivity);
+
+    }
+
 
     public void getLocation() {
         locationButton = (Button) findViewById(R.id.locationButton);
