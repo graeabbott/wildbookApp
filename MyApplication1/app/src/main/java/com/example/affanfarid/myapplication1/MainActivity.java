@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,10 +46,13 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 //TODO:
 //Make all the methods private and use the Onclick method
-//
+// Fragments
 //
 //
 
@@ -60,12 +64,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
 
 
+
+    public ImageView mImageView;
+
     private Button locationButton;
     private TextView locationText;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private final int locationRefreshRate = 5000; //in milliseconds
+    private final int locationRefreshRate = 30 * 1000; //in milliseconds
     private final int minDistance = 5; //minimum distance change for location to update, in meters
+    private int fileNumCounter = 0;
+
+
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -121,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTextMessage = (TextView) findViewById(R.id.message);
+        mImageView = (ImageView) findViewById(R.id.thumbnail);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         getLocation();
@@ -237,12 +249,31 @@ public class MainActivity extends AppCompatActivity {
 
     public void cameraStart(){
 
-        Intent intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        dispatchTakePictureIntent();
+        //Intent cameraIntent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+//        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//                System.out.println("works");
+//            } catch (IOException ex) {
+//                // Error occurred while creating the File
+//                Toast.makeText(this, "Error occurred while creating the File", Toast.LENGTH_LONG).show();
+//                System.out.println("doesnt work");
+//            }
+//
+//            Uri photoURI = FileProvider.getUriForFile(this,
+//                    "com.example.android.fileprovider",
+//                    photoFile);
+//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//            startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
+//        }
 
 //
 //        WRITE IMAGE SAVING CODE HERE
 //
-//        File pictureDirectory = Enviornment.getExternalStoragePublicDirectory(Enviornment.DIRECTORY_PICTURES);
+//        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 //
 //        String imageName = getPictureName();
 //        File imageFile = new File(pictureDirectory, imageName);
@@ -252,18 +283,120 @@ public class MainActivity extends AppCompatActivity {
 //        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
 
 
-        startActivity(intent);
+//        storageDir = new File(
+//                Environment.getExternalStoragePublicDirectory(
+//                        Environment.DIRECTORY_PICTURES
+//                ),
+//                getAlbumName()
+//        );
+
+
+
+
+
+        //startActivity(cameraIntent);
 
 
     }
 
 
 
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            mImageView.setImageBitmap(imageBitmap);
+        }
+    }
+
+//    public String mCurrentPhotoPath;
+//
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        mCurrentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
+//
+//    static final int REQUEST_TAKE_PHOTO = 1;
+//
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Ensure that there's a camera activity to handle the intent
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            // Create the File where the photo should go
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            } catch (IOException ex) {
+//                // Error occurred while creating the File
+//                Toast.makeText(this,"Error occurred while creating the File", Toast.LENGTH_LONG).show();
+//            }
+//            // Continue only if the File was successfully created
+//            if (photoFile != null) {
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        "com.example.android.fileprovider",
+//                        photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
+//    }
+
+//    private void handleSmallCameraPhoto(Intent intent) {
+//        Bundle extras = intent.getExtras();
+//        mImageBitmap = (Bitmap) extras.get("data");
+//        mImageView.setImageBitmap(mImageBitmap);
+//        mVideoUri = null;
+//        mImageView.setVisibility(View.VISIBLE);
+//        mVideoView.setVisibility(View.INVISIBLE);
+//    }
+//
+//    private void handleBigCameraPhoto() {
+//
+//        if (mCurrentPhotoPath != null) {
+//            setPic();
+//            galleryAddPic();
+//            mCurrentPhotoPath = null;
+//        }
+//
+//    }
 
 
 
 
 
 
+
+//    public String getPictureName(){
+//        //WILDBOOK_PIC_000
+//        String picName = "null";
+//
+//        picName = "WILDBOOK_PIC_" + (fileNumCounter++);
+//        return picName;
+//
+//
+//
+//    }
 
 }

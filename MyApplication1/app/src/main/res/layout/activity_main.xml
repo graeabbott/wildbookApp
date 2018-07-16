@@ -56,6 +56,13 @@
             android:layout_gravity="bottom"
             android:text="Location" />
 
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="87dp"
+            android:layout_height="87dp"
+            android:layout_gravity="left|center_horizontal|center"
+            app:srcCompat="@android:drawable/ic_menu_help" />
+
     </FrameLayout>
 
 
