@@ -4,9 +4,12 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ExifInterface;
+import android.media.ThumbnailUtils;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -53,14 +56,18 @@ import java.util.Date;
 //TODO:
 //Make all the methods private and use the Onclick method
 // Fragments
+// Rotate bitmap thumbnail
 //
 //
 
 public class MainActivity extends AppCompatActivity {
 
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int thumbnailHeight = 100;
     public static final int CAMERA_PERMISSION_REQUEST_CODE = 8675309;
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 10;
+    static final int locationRefreshRate = 30 * 1000; //in milliseconds
+    static final int minDistance = 5; //minimum distance change for location to update, in meters
     private TextView mTextMessage;
 
 
@@ -71,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView locationText;
     private LocationManager locationManager;
     private LocationListener locationListener;
-    private final int locationRefreshRate = 30 * 1000; //in milliseconds
-    private final int minDistance = 5; //minimum distance change for location to update, in meters
+
     private int fileNumCounter = 0;
 
 
@@ -300,25 +306,90 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    static final int REQUEST_TAKE_PHOTO = 1;
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            // Create the File where the photo should go
+            System.out.println("before");
+            File photoFile = null;
+            System.out.println("after");
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                System.out.println("caught IO Exception");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
         }
     }
 
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+//        }
+//    }
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+
+            if (data != null){
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                imageBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, thumbnailHeight, thumbnailHeight);
+
+                //ExifInterface ei = new ExifInterface(imageBitmap.getImageUri());
+
+
+
+
+                mImageView.setImageBitmap(imageBitmap);
+            }
+
+
         }
     }
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
 
 //    public String mCurrentPhotoPath;
 //
