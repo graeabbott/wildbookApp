@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
@@ -256,10 +255,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void cameraStart(){
 
-        //takePicture();
-
         dispatchTakePictureIntent();
-
         //Intent cameraIntent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
 //        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
@@ -313,36 +309,26 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_TAKE_PHOTO = 1;
 
     private void dispatchTakePictureIntent() {
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         // Ensure that there's a camera activity to handle the intent
-
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-
+            System.out.println("before");
             File photoFile = null;
-
+            System.out.println("after");
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
                 // Error occurred while creating the File
-                //System.out.println("caught IO Exception");
+                System.out.println("caught IO Exception");
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
                         photoFile);
-               //takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
-                //takePictureIntent.putExtra("IMAGEURI", photoURI.toString());
-
-
-
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-
             }
         }
     }
@@ -366,41 +352,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        //System.out.println("marker2.5");
-
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            //System.out.println("marker3");
-
-
             if (data != null){
-
-                //System.out.println("marker4");
-
-
                 Bundle extras = data.getExtras();
-
-                //System.out.println("marker5");
-
-                //Uri uri = Uri.parse(extras.getString("IMAGEURI"));
-                //Bitmap myImg = BitmapFactory.decodeFile(uri.getPath());
-                //mImageView.setImageBitmap(myImg);
-
-
-
-
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, thumbnailHeight, thumbnailHeight);
-//
-//                //ExifInterface ei = new ExifInterface(imageBitmap.getImageUri());
+
+                //ExifInterface ei = new ExifInterface(imageBitmap.getImageUri());
 
 
-                //System.out.println("marker6");
 
 
                 mImageView.setImageBitmap(imageBitmap);
-                //mImageView.setImageBitmap(myImg);
             }
 
 
@@ -416,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
-                ".png",         /* suffix */
+                ".jpg",         /* suffix */
                 storageDir      /* directory */
         );
 
@@ -425,46 +389,85 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-    public String createUniqueName(){
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "WLDBK_" + timeStamp + ".png";
-        return imageFileName;
-    }
 
 
-    public static final String PATH_TO_IMAGE_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()
-            + File.separator + "WILDBOOK" + File.separator;
+//    public String mCurrentPhotoPath;
+//
+//    private File createImageFile() throws IOException {
+//        // Create an image file name
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+//        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+//        File image = File.createTempFile(
+//                imageFileName,  /* prefix */
+//                ".jpg",         /* suffix */
+//                storageDir      /* directory */
+//        );
+//
+//        // Save a file: path for use with ACTION_VIEW intents
+//        mCurrentPhotoPath = image.getAbsolutePath();
+//        return image;
+//    }
+//
+//    static final int REQUEST_TAKE_PHOTO = 1;
+//
+//    private void dispatchTakePictureIntent() {
+//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        // Ensure that there's a camera activity to handle the intent
+//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+//            // Create the File where the photo should go
+//            File photoFile = null;
+//            try {
+//                photoFile = createImageFile();
+//            } catch (IOException ex) {
+//                // Error occurred while creating the File
+//                Toast.makeText(this,"Error occurred while creating the File", Toast.LENGTH_LONG).show();
+//            }
+//            // Continue only if the File was successfully created
+//            if (photoFile != null) {
+//                Uri photoURI = FileProvider.getUriForFile(this,
+//                        "com.example.android.fileprovider",
+//                        photoFile);
+//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+//            }
+//        }
+//    }
+
+//    private void handleSmallCameraPhoto(Intent intent) {
+//        Bundle extras = intent.getExtras();
+//        mImageBitmap = (Bitmap) extras.get("data");
+//        mImageView.setImageBitmap(mImageBitmap);
+//        mVideoUri = null;
+//        mImageView.setVisibility(View.VISIBLE);
+//        mVideoView.setVisibility(View.INVISIBLE);
+//    }
+//
+//    private void handleBigCameraPhoto() {
+//
+//        if (mCurrentPhotoPath != null) {
+//            setPic();
+//            galleryAddPic();
+//            mCurrentPhotoPath = null;
+//        }
+//
+//    }
 
 
-    public static File generateImageFile(String fileName) {
-        File wildbookDir = new File(PATH_TO_IMAGE_FILE);
-        if(!wildbookDir.exists()) {
-            wildbookDir.mkdir();
-        }
-        return new File(PATH_TO_IMAGE_FILE + fileName);
-    }
-
-    public void takePicture() {
 
 
-        String imageFileName = createUniqueName();
-
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(generateImageFile(imageFileName)));
-
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
 
 
+
+//    public String getPictureName(){
+//        //WILDBOOK_PIC_000
+//        String picName = "null";
+//
+//        picName = "WILDBOOK_PIC_" + (fileNumCounter++);
+//        return picName;
+//
+//
+//
+//    }
 
 }
-
-//test comment
-
-//public class GenericFileProvider extends FileProvider {}
-
-
-
-
