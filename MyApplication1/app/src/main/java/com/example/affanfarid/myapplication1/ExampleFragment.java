@@ -17,7 +17,7 @@ public class ExampleFragment extends Fragment {
     }
 }
 
-
+//comment
 
 //package com.example.affanfarid.myapplication1;
 //
