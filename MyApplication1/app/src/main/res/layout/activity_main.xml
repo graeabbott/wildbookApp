@@ -18,6 +18,13 @@
         android:layout_height="363dp"
         android:layout_weight="1" />
 
+    <fragment
+        android:id="@+id/album_fragment"
+        android:name="com.example.affanfarid.myapplication1.AlbumFragment"
+        android:layout_width="match_parent"
+        android:layout_height="363dp"
+        android:layout_weight="1" />
+
 
 
 

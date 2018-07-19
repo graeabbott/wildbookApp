@@ -14,10 +14,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.annotation.AnimRes;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -84,7 +91,25 @@ public class MainActivity extends AppCompatActivity {
 
     private int fileNumCounter = 0;
 
+    public Fragment currentFragment = new ExampleFragment();
 
+
+
+    public int getCurrentFragmentID(){
+        Fragment homeFrag = new ExampleFragment();
+        Fragment albumFrag = new AlbumFragment();
+        if( currentFragment.getClass() == homeFrag.getClass()){
+            return R.id.example_fragment;
+
+        }
+        if(currentFragment.getClass() == albumFrag.getClass()){
+            return R.id.album_fragment;
+        }
+
+        else return R.id.example_fragment;
+
+
+    }
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -94,14 +119,25 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+
+                    Fragment newFragment = new ExampleFragment();
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(getCurrentFragmentID(), newFragment);
+                    ft.commit();
+                    currentFragment = newFragment;
+
                     return true;
+
+
+
+//                    mTextMessage.setText(R.string.title_home);
+//                    return true;
                 case R.id.navigation_camera:
                     mTextMessage.setText(R.string.title_camera);
                     onTakePhotoClick_Menu();
                     return true;
                 case R.id.navigation_gallery:
-                    mTextMessage.setText(R.string.title_gallery);
+                    mTextMessage.setText(R.string.title_album);
                     goToAlbum_Menu();
                     return true;
             }
@@ -150,8 +186,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToAlbum_Menu(){
-        Intent startAlbumActivity = new Intent(this, albumActivity.class);
-        startActivity(startAlbumActivity);
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.album_fragment, new AlbumFragment()).commit();
+
+//        Intent startAlbumActivity = new Intent(this, albumActivity.class);
+//        startActivity(startAlbumActivity);
 
     }
 
