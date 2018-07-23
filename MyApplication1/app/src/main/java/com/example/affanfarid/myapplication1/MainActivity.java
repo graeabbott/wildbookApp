@@ -104,18 +104,22 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             Fragment selectedFragment = null;
-
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     selectedFragment = new HomeFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                    transaction.replace(R.id.fragment_container, selectedFragment);
+                    transaction.addToBackStack("null");
+                    transaction.commit();
                     return true;
                 case R.id.navigation_camera:
                     onTakePhotoClick_Menu();
                     return true;
                 case R.id.navigation_gallery:
                     selectedFragment = new AlbumFragment();
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+                    transaction.replace(R.id.fragment_container, selectedFragment);
+                    transaction.addToBackStack("null");
+                    transaction.commit();
                     return true;
             }
 
