@@ -146,11 +146,8 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
 
 
-        //selectedFragment = new HomeFragment();
 
-
-
-        //getLocation();
+        getLocation();
 
 
         //navigation.setTranslucentNavigationEnabled(true);
@@ -180,7 +177,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed(){
+        BottomNavigationView nav = (BottomNavigationView) findViewById(R.id.navigation);
+        FragmentManager manager = getSupportFragmentManager();
+        if(manager.getBackStackEntryCount() > 0) {
+            super.onBackPressed();
+            Fragment currentFragment = manager.findFragmentById(R.id.fragment_container);
+            if(currentFragment instanceof HomeFragment){
+                nav.getMenu().findItem(R.id.navigation_home).setChecked(true);
+            }
+            else if(currentFragment instanceof AlbumFragment) {
+                nav.getMenu().findItem(R.id.navigation_gallery).setChecked(true);
+            }
+        }
+    }
 
     public void getLocation() {
         locationButton = (Button) findViewById(R.id.locationButton);
