@@ -66,7 +66,7 @@ import java.util.Date;
 
 
 //TODO:
-//Make all the methods private and use the Onclick method
+// Make all the methods private and use the Onclick method
 // Fragments
 // Rotate bitmap thumbnail
 // Redirect back arrow to home
