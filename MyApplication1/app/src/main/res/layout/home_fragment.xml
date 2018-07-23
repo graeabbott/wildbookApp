@@ -1,9 +1,10 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/holo_red_light"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.example.affanfarid.myapplication1.ExampleFragment">
+    tools:context="com.example.affanfarid.myapplication1.HomeFragment">
 
     <TextView
         android:id="@+id/message"
@@ -13,14 +14,17 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/title_home" />
+        android:text="HOME FRAGMENT" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:text="@string/title_album" />
+        android:text="@string/title_album"
+        android:layout_below="@+id/message"
+        android:layout_alignEnd="@+id/locationButton"
+        android:layout_marginTop="30dp" />
 
     <Button
         android:id="@+id/cameraButton"
@@ -28,27 +32,38 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:onClick="onTakePhotoClick_Button"
-        android:text="@string/title_camera" />
+        android:text="@string/title_camera"
+        android:layout_alignTop="@+id/button3"
+        android:layout_alignStart="@+id/locationText"
+        android:layout_marginTop="14dp" />
 
     <TextView
         android:id="@+id/locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:text="No Location Available" />
+        android:text="No Location Available"
+        android:layout_alignBottom="@+id/locationButton"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:text="Location" />
+        android:text="Location"
+        android:layout_marginTop="127dp"
+        android:layout_below="@+id/message"
+        android:layout_alignStart="@+id/thumbnail" />
 
     <ImageView
         android:id="@+id/thumbnail"
         android:layout_width="87dp"
         android:layout_height="87dp"
         android:layout_gravity="left|center_horizontal|center"
-        app:srcCompat="@android:drawable/ic_menu_help" />
+        app:srcCompat="@android:drawable/ic_menu_help"
+        android:layout_marginTop="91dp"
+        android:layout_below="@+id/locationButton"
+        android:layout_alignStart="@+id/message" />
 
-</FrameLayout>
+</RelativeLayout>

@@ -63,6 +63,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+
 //TODO:
 //Make all the methods private and use the Onclick method
 // Fragments
@@ -81,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMessage;
 
 
-
     public ImageView mImageView;
 
     private Button locationButton;
@@ -91,25 +92,24 @@ public class MainActivity extends AppCompatActivity {
 
     private int fileNumCounter = 0;
 
-    public Fragment currentFragment = new ExampleFragment();
+//    public Fragment currentFragment = new HomeFragment();
 
 
-
-    public int getCurrentFragmentID(){
-        Fragment homeFrag = new ExampleFragment();
-        Fragment albumFrag = new AlbumFragment();
-        if( currentFragment.getClass() == homeFrag.getClass()){
-            return R.id.example_fragment;
-
-        }
-        if(currentFragment.getClass() == albumFrag.getClass()){
-            return R.id.album_fragment;
-        }
-
-        else return R.id.example_fragment;
-
-
-    }
+//    public int getCurrentFragmentID(){
+//        Fragment homeFrag = new HomeFragment();
+//        Fragment albumFrag = new AlbumFragment();
+//        if( currentFragment.getClass() == homeFrag.getClass()){
+//            return R.id.home_fragment;
+//
+//        }
+//        if(currentFragment.getClass() == albumFrag.getClass()){
+//            return R.id.album_fragment;
+//        }
+//
+//        else return R.id.home_fragment;
+//
+//
+//    }
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -117,59 +117,54 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+            Fragment selectedFragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    //mTextMessage.setText(R.string.title_home);
+                    selectedFragment = new HomeFragment();
 
-                    Fragment newFragment = new ExampleFragment();
-                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                    ft.replace(getCurrentFragmentID(), newFragment);
-                    ft.commit();
-                    currentFragment = newFragment;
 
+//                    Fragment newFragment = new ExampleFragment();
+//                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                    ft.replace(getCurrentFragmentID(), newFragment);
+//                    ft.commit();
+//                    currentFragment = newFragment;
+
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                     return true;
-
 
 
 //                    mTextMessage.setText(R.string.title_home);
 //                    return true;
                 case R.id.navigation_camera:
-                    mTextMessage.setText(R.string.title_camera);
+                    //mTextMessage.setText(R.string.title_camera);
                     onTakePhotoClick_Menu();
                     return true;
                 case R.id.navigation_gallery:
-                    mTextMessage.setText(R.string.title_album);
-                    goToAlbum_Menu();
+                    //mTextMessage.setText(R.string.title_album);
+                    selectedFragment = new AlbumFragment();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
+
+                    //goToAlbum_Menu();
+
+//                    setTitle("First Fragment");
+//                    AlbumFragment first = new AlbumFragment();
+//                    FragmentManager fragmentManager = getSupportFragmentManager();
+//                    fragmentManager.beginTransaction().replace(R.id.fragment1, first).commit();
+
                     return true;
             }
+
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+
             return false;
         }
 
     };
 
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == CAMERA_PERMISSION_REQUEST_CODE){
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                cameraStart();
-            }
-            else{
-                Toast.makeText(this,"cant take photo without permission", Toast.LENGTH_LONG).show();
-            }
-        }
-
-        if(requestCode==LOCATION_PERMISSION_REQUEST_CODE){
-            if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                onLocationClick();
-            }
-            else{
-                Toast.makeText(this,"cant get location without permission", Toast.LENGTH_LONG).show();
-            }
-
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,19 +175,46 @@ public class MainActivity extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.thumbnail);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        getLocation();
+        //getLocation();
+
+
         //navigation.setTranslucentNavigationEnabled(true);
 
     }
 
-    public void goToAlbum_Menu(){
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.album_fragment, new AlbumFragment()).commit();
 
-//        Intent startAlbumActivity = new Intent(this, albumActivity.class);
-//        startActivity(startAlbumActivity);
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                cameraStart();
+            } else {
+                Toast.makeText(this, "cant take photo without permission", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                onLocationClick();
+            } else {
+                Toast.makeText(this, "cant get location without permission", Toast.LENGTH_LONG).show();
+            }
+
+        }
 
     }
+
+
+
+//    public void goToAlbum_Menu(){
+//        FragmentManager manager = getSupportFragmentManager();
+//        manager.beginTransaction().replace(R.id.album_fragment, new AlbumFragment()).commit();
+//
+////        Intent startAlbumActivity = new Intent(this, albumActivity.class);
+////        startActivity(startAlbumActivity);
+//
+//    }
 
 
     public void getLocation() {
@@ -203,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onLocationChanged(Location location) {
 
-                locationText.setText("\n" + location.getLongitude() + " " + location.getLatitude() );
+                locationText.setText("\n" + location.getLongitude() + " " + location.getLatitude());
             }
 
             @Override
@@ -224,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{
                         Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET
@@ -233,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-        }else{
+        } else {
 
             requestLocation();
 
@@ -242,14 +264,13 @@ public class MainActivity extends AppCompatActivity {
         requestLocation();
 
 
-
     }
 
-    private void onLocationClick(){
+    private void onLocationClick() {
 
-        locationButton.setOnClickListener(new View.OnClickListener(){
+        locationButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
 
                 requestLocation();
 
@@ -262,40 +283,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void requestLocation(){
+    private void requestLocation() {
         locationManager.requestLocationUpdates("gps", locationRefreshRate, minDistance, locationListener);
     }
 
-    public void onTakePhotoClick_Menu(){
-        if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+    public void onTakePhotoClick_Menu() {
+        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
             cameraStart();
             //onButtonTap();
-        }
-        else{
+        } else {
             String[] permissionRequest = {Manifest.permission.CAMERA};
             requestPermissions(permissionRequest, CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
 
 
-
-    public void onTakePhotoClick_Button(View v){
-        if(checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+    public void onTakePhotoClick_Button(View v) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
             cameraStart();
             //onButtonTap();
-        }
-        else{
+        } else {
             String[] permissionRequest = {Manifest.permission.CAMERA};
             requestPermissions(permissionRequest, CAMERA_PERMISSION_REQUEST_CODE);
         }
     }
 
 
-
-
-    public void cameraStart(){
+    public void cameraStart() {
 
         dispatchTakePictureIntent();
         //Intent cameraIntent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -337,9 +353,6 @@ public class MainActivity extends AppCompatActivity {
 //                ),
 //                getAlbumName()
 //        );
-
-
-
 
 
         //startActivity(cameraIntent);
@@ -391,19 +404,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 
-            if (data != null){
+            if (data != null) {
                 Bundle extras = data.getExtras();
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 imageBitmap = ThumbnailUtils.extractThumbnail(imageBitmap, thumbnailHeight, thumbnailHeight);
 
                 //ExifInterface ei = new ExifInterface(imageBitmap.getImageUri());
-
-
 
 
                 mImageView.setImageBitmap(imageBitmap);
@@ -430,86 +440,8 @@ public class MainActivity extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
-
-
-//    public String mCurrentPhotoPath;
-//
-//    private File createImageFile() throws IOException {
-//        // Create an image file name
-//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-//
-//        // Save a file: path for use with ACTION_VIEW intents
-//        mCurrentPhotoPath = image.getAbsolutePath();
-//        return image;
-//    }
-//
-//    static final int REQUEST_TAKE_PHOTO = 1;
-//
-//    private void dispatchTakePictureIntent() {
-//        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        // Ensure that there's a camera activity to handle the intent
-//        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//            // Create the File where the photo should go
-//            File photoFile = null;
-//            try {
-//                photoFile = createImageFile();
-//            } catch (IOException ex) {
-//                // Error occurred while creating the File
-//                Toast.makeText(this,"Error occurred while creating the File", Toast.LENGTH_LONG).show();
-//            }
-//            // Continue only if the File was successfully created
-//            if (photoFile != null) {
-//                Uri photoURI = FileProvider.getUriForFile(this,
-//                        "com.example.android.fileprovider",
-//                        photoFile);
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-//            }
-//        }
-//    }
-
-//    private void handleSmallCameraPhoto(Intent intent) {
-//        Bundle extras = intent.getExtras();
-//        mImageBitmap = (Bitmap) extras.get("data");
-//        mImageView.setImageBitmap(mImageBitmap);
-//        mVideoUri = null;
-//        mImageView.setVisibility(View.VISIBLE);
-//        mVideoView.setVisibility(View.INVISIBLE);
-//    }
-//
-//    private void handleBigCameraPhoto() {
-//
-//        if (mCurrentPhotoPath != null) {
-//            setPic();
-//            galleryAddPic();
-//            mCurrentPhotoPath = null;
-//        }
-//
-//    }
-
-
-
-
-
-
-
-//    public String getPictureName(){
-//        //WILDBOOK_PIC_000
-//        String picName = "null";
-//
-//        picName = "WILDBOOK_PIC_" + (fileNumCounter++);
-//        return picName;
-//
-//
-//
-//    }
-
 }
+
+
+
+

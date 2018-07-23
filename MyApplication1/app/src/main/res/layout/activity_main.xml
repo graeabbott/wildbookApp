@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -11,21 +11,26 @@
     tools:context="com.example.affanfarid.myapplication1.MainActivity">
 
 
-    <fragment
-        android:id="@+id/example_fragment"
-        android:name="com.example.affanfarid.myapplication1.ExampleFragment"
+    <!--<fragment-->
+        <!--android:id="@+id/home_fragment"-->
+        <!--android:name="com.example.affanfarid.myapplication1.HomeFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="363dp"-->
+        <!--android:layout_weight="1" />-->
+
+    <!--<fragment-->
+        <!--android:id="@+id/album_fragment"-->
+        <!--android:name="com.example.affanfarid.myapplication1.AlbumFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="363dp"-->
+        <!--android:layout_weight="1" />-->
+
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="363dp"
-        android:layout_weight="1" />
-
-    <fragment
-        android:id="@+id/album_fragment"
-        android:name="com.example.affanfarid.myapplication1.AlbumFragment"
-        android:layout_width="match_parent"
-        android:layout_height="363dp"
-        android:layout_weight="1" />
-
-
+        android:layout_height="match_parent"
+        android:layout_above="@+id/navigation"/>
 
 
 
@@ -42,7 +47,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:background="?android:attr/windowBackground"
         app:menu="@menu/navigation" />
 
-</LinearLayout>
+</RelativeLayout>
