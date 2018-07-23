@@ -139,6 +139,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment selectedFragment = new HomeFragment();
+        transaction.replace(R.id.fragment_container, selectedFragment);
+        transaction.addToBackStack("null");
+        transaction.commit();
+
+
         //selectedFragment = new HomeFragment();
 
 
