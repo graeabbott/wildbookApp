@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        getLocation();
+        //getLocation();
 
 
         //navigation.setTranslucentNavigationEnabled(true);
@@ -190,6 +190,9 @@ public class MainActivity extends AppCompatActivity {
             else if(currentFragment instanceof AlbumFragment) {
                 nav.getMenu().findItem(R.id.navigation_gallery).setChecked(true);
             }
+        }
+        else{
+            super.onBackPressed();
         }
     }
 
