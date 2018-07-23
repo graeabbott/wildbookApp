@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment selectedFragment = new HomeFragment();
         transaction.replace(R.id.fragment_container, selectedFragment);
-        transaction.addToBackStack("null");
         transaction.commit();
 
 
