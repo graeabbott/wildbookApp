@@ -17,44 +17,44 @@
         android:text="HOME FRAGMENT" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/albumButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:text="@string/title_album"
-        android:layout_below="@+id/message"
-        android:layout_alignEnd="@+id/locationButton"
-        android:layout_marginTop="30dp" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+
+         />
 
     <Button
         android:id="@+id/cameraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center_horizontal|center_vertical"
         android:onClick="onTakePhotoClick_Button"
         android:text="@string/title_camera"
-        android:layout_alignTop="@+id/button3"
-        android:layout_alignStart="@+id/locationText"
-        android:layout_marginTop="14dp" />
+        android:layout_centerHorizontal="true"
+
+         />
 
     <TextView
         android:id="@+id/locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
         android:text="No Location Available"
-        android:layout_alignBottom="@+id/locationButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
 
     <Button
         android:id="@+id/locationButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="false"
         android:layout_gravity="bottom"
         android:text="Location"
-        android:layout_marginTop="127dp"
-        android:layout_below="@+id/message"
-        android:layout_alignStart="@+id/thumbnail" />
+        android:layout_alignParentBottom="true"/>
 
     <ImageView
         android:id="@+id/thumbnail"
