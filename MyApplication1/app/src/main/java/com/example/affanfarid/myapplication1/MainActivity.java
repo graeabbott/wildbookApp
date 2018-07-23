@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.location.Location;
 import android.location.LocationListener;
@@ -59,6 +60,8 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -71,6 +74,8 @@ import java.util.Date;
 // Rotate bitmap thumbnail
 // Redirect back arrow to home
 //
+
+//Internal Storage/Android/data/com.example.affanfarid.myapplication1/files/Pictures/JPEG_20180723.png
 
 public class MainActivity extends AppCompatActivity {
 
@@ -135,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mTextMessage = (TextView) findViewById(R.id.message);
-        mImageView = (ImageView) findViewById(R.id.thumbnail);
+        //mImageView = (ImageView) findViewById(R.id.thumbnail);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -418,6 +423,10 @@ public class MainActivity extends AppCompatActivity {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
+
+
+
 }
 
 

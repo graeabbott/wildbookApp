@@ -60,10 +60,9 @@
         android:id="@+id/thumbnail"
         android:layout_width="87dp"
         android:layout_height="87dp"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
         android:layout_gravity="left|center_horizontal|center"
-        app:srcCompat="@android:drawable/ic_menu_help"
-        android:layout_marginTop="91dp"
-        android:layout_below="@+id/locationButton"
-        android:layout_alignStart="@+id/message" />
+        app:srcCompat="@android:drawable/ic_menu_help" />
 
 </RelativeLayout>
