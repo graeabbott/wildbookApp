@@ -69,7 +69,7 @@ import java.util.Date;
 //Make all the methods private and use the Onclick method
 // Fragments
 // Rotate bitmap thumbnail
-//
+// Redirect back arrow to home
 //
 
 public class MainActivity extends AppCompatActivity {
@@ -94,22 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
 //    public Fragment currentFragment = new HomeFragment();
 
-
-//    public int getCurrentFragmentID(){
-//        Fragment homeFrag = new HomeFragment();
-//        Fragment albumFrag = new AlbumFragment();
-//        if( currentFragment.getClass() == homeFrag.getClass()){
-//            return R.id.home_fragment;
-//
-//        }
-//        if(currentFragment.getClass() == albumFrag.getClass()){
-//            return R.id.album_fragment;
-//        }
-//
-//        else return R.id.home_fragment;
-//
-//
-//    }
+   // Fragment selectedFragment = null;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -122,43 +107,17 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    //mTextMessage.setText(R.string.title_home);
                     selectedFragment = new HomeFragment();
-
-
-//                    Fragment newFragment = new ExampleFragment();
-//                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//                    ft.replace(getCurrentFragmentID(), newFragment);
-//                    ft.commit();
-//                    currentFragment = newFragment;
-
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
                     return true;
-
-
-//                    mTextMessage.setText(R.string.title_home);
-//                    return true;
                 case R.id.navigation_camera:
-                    //mTextMessage.setText(R.string.title_camera);
                     onTakePhotoClick_Menu();
                     return true;
                 case R.id.navigation_gallery:
-                    //mTextMessage.setText(R.string.title_album);
                     selectedFragment = new AlbumFragment();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
-
-
-                    //goToAlbum_Menu();
-
-//                    setTitle("First Fragment");
-//                    AlbumFragment first = new AlbumFragment();
-//                    FragmentManager fragmentManager = getSupportFragmentManager();
-//                    fragmentManager.beginTransaction().replace(R.id.fragment1, first).commit();
-
                     return true;
             }
-
-            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
 
             return false;
         }
@@ -175,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
         mImageView = (ImageView) findViewById(R.id.thumbnail);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        //selectedFragment = new HomeFragment();
+
+
+
         //getLocation();
 
 
@@ -205,16 +169,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-//    public void goToAlbum_Menu(){
-//        FragmentManager manager = getSupportFragmentManager();
-//        manager.beginTransaction().replace(R.id.album_fragment, new AlbumFragment()).commit();
-//
-////        Intent startAlbumActivity = new Intent(this, albumActivity.class);
-////        startActivity(startAlbumActivity);
-//
-//    }
 
 
     public void getLocation() {
