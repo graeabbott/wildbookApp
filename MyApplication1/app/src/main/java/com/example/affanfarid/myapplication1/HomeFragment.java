@@ -36,14 +36,27 @@ public class HomeFragment extends Fragment {
         File sdCard = Environment.getExternalStorageDirectory();
         //Internal Storage/Android/data/com.example.affanfarid.myapplication1/files/Pictures/JPEG_20180723.png
         File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
-        File file = new File(directory, "JPEG_20180718_101356_760658815"); //or any other format supported
+        File file = new File(directory, "JPEG_20180718_101356_760658815.jpg"); //or any other format supported
 
         System.out.println("DIRECTORY NAME IS: "+directory.listFiles()[0]);
 
 
 
         System.out.println("IMAGE VIEW: " + mImageView);
-        mImageView.setImageBitmap(BitmapFactory.decodeFile(directory+"JPEG_20180718_101356_760658815"));
+
+        System.out.println(file);
+
+        if(file.exists()){
+
+            mImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+        }
+
+
+
+
+
+
+        //mImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
 
 
         //mImageView.setImageBitmap(BitmapFactory.decodeFile());
