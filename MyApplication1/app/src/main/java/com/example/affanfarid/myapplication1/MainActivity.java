@@ -297,49 +297,6 @@ public class MainActivity extends AppCompatActivity {
     public void cameraStart() {
 
         dispatchTakePictureIntent();
-        //Intent cameraIntent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-//        if (cameraIntent.resolveActivity(getPackageManager()) != null) {
-//            File photoFile = null;
-//            try {
-//                photoFile = createImageFile();
-//                System.out.println("works");
-//            } catch (IOException ex) {
-//                // Error occurred while creating the File
-//                Toast.makeText(this, "Error occurred while creating the File", Toast.LENGTH_LONG).show();
-//                System.out.println("doesnt work");
-//            }
-//
-//            Uri photoURI = FileProvider.getUriForFile(this,
-//                    "com.example.android.fileprovider",
-//                    photoFile);
-//            cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//            startActivityForResult(cameraIntent, REQUEST_TAKE_PHOTO);
-//        }
-
-//
-//        WRITE IMAGE SAVING CODE HERE
-//
-//        File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-//
-//        String imageName = getPictureName();
-//        File imageFile = new File(pictureDirectory, imageName);
-//
-//        Uri pictureUri = Uri.fromFile(imageFile);
-//
-//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, pictureUri);
-
-
-//        storageDir = new File(
-//                Environment.getExternalStoragePublicDirectory(
-//                        Environment.DIRECTORY_PICTURES
-//                ),
-//                getAlbumName()
-//        );
-
-
-        //startActivity(cameraIntent);
-
 
     }
 
