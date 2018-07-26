@@ -19,50 +19,16 @@ import java.io.IOException;
 public class HomeFragment extends Fragment {
 
 
-
-    public ImageView testImage;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        //testImage = (ImageView) getActivity().findViewById(R.id.thumbnail);
-        //retrieveFromStorage();
 
         View myFragmentView = inflater.inflate(R.layout.home_fragment, container, false);
 
-        ImageView mImageView = (ImageView) myFragmentView.findViewById(R.id.thumbnail);
+        int num = 0;
 
-        File sdCard = Environment.getExternalStorageDirectory();
-        //Internal Storage/Android/data/com.example.affanfarid.myapplication1/files/Pictures/JPEG_20180723.png
-        File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
-        File file = new File(directory, "JPEG_20180718_101356_760658815.jpg"); //or any other format supported
-
-        System.out.println("DIRECTORY NAME IS: "+directory.listFiles()[0]);
-
-
-
-        System.out.println("IMAGE VIEW: " + mImageView);
-
-        System.out.println(file);
-
-        if(file.exists()){
-
-            mImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-        }
-
-
-
-
-
-
-        //mImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
-
-
-        //mImageView.setImageBitmap(BitmapFactory.decodeFile());
-
-
-
+        retrieveFile(myFragmentView, num);
 
 
 
@@ -71,47 +37,56 @@ public class HomeFragment extends Fragment {
         return myFragmentView;
     }
 
-//    public void retrieveFromStorage(){
-//        File sdCard = Environment.getExternalStorageDirectory();
-//        //Internal Storage/Android/data/com.example.affanfarid.myapplication1/files/Pictures/JPEG_20180723.png
-//        File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
-//        File file = new File(directory, "JPEG_20180718_101356_760658815"); //or any other format supported
-//
-//        System.out.println("DIRECTORY NAME IS: "+directory.listFiles()[0]);
-//
-//
-//
-//        ImageView mImageView;
-//        //mImageView = (ImageView) getView().findViewById(R.id.thumbnail);
-//
-//        System.out.println("IMAGE VIEW: " + mImageView);
-////        mImageView.setImageBitmap(BitmapFactory.decodeFile(directory+"JPEG_20180718_101356_760658815"));
-//
-//
-//        //mImageView.setImageBitmap(BitmapFactory.decodeFile());
-////
-////        try
-////        {
-////            FileInputStream streamIn = new FileInputStream(file);
-////            Bitmap testBitmap = BitmapFactory.decodeStream(streamIn); //This gets the image
-////            testImage.setImageBitmap(testBitmap);
-////
-////            try {
-////                streamIn.close();
-////            }
-////            catch (IOException e) {
-////                // Do something here
-////            }
-////
-////        }
-////        catch (FileNotFoundException ex)
-////        {
-////            // insert code to run when exception occurs
-////        }
-//
-//
-//
-//    }
+    public void retrieveFile(View fragView, int num){
+
+        ImageView mImageView = (ImageView) fragView.findViewById(R.id.thumbnail);
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
+
+
+        File[] fileArray = directory.listFiles();
+
+        if( num < 0 || num > fileArray.length || fileArray.length <= 0){
+
+            System.out.println("INVALID INDEX");
+            return;
+        }
+        else{
+
+
+            //File file = new File(directory, "JPEG_20180718_105716_724376777.jpg");
+
+
+
+            //File file = new File(directory, directory.listFiles()[num]);
+            File file = directory.listFiles()[num];
+
+
+            System.out.println("DIRECTORY NAME IS: "+directory.listFiles()[num]);
+
+
+
+            System.out.println("IMAGE VIEW: " + mImageView);
+
+            System.out.println(file);
+
+            if(file.exists()){
+
+                displayImage(mImageView,file);
+
+                //mImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+            }
+
+        }
+
+    }
+
+    public void displayImage(ImageView imgView, File file){
+
+        imgView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+
+    }
 
 
 }

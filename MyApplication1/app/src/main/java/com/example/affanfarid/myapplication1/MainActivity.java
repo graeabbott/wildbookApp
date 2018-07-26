@@ -351,9 +351,7 @@ public class MainActivity extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            System.out.println("before");
             File photoFile = null;
-            System.out.println("after");
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
@@ -367,6 +365,7 @@ public class MainActivity extends AppCompatActivity {
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+
             }
         }
     }
@@ -404,14 +403,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+        else{
+
+            File file = new File(mCurrentPhotoPath);
+            file.delete();
+
+        }
+
     }
 
     String mCurrentPhotoPath;
+
 
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
+
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
