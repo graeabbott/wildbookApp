@@ -2,6 +2,7 @@ package com.example.affanfarid.myapplication1;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -26,11 +27,9 @@ public class HomeFragment extends Fragment {
 
         View myFragmentView = inflater.inflate(R.layout.home_fragment, container, false);
 
-        int num = 0;
+        int num = 1;
 
         retrieveFile(myFragmentView, num);
-
-
 
 
 
@@ -43,50 +42,40 @@ public class HomeFragment extends Fragment {
 
         File sdCard = Environment.getExternalStorageDirectory();
         File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
-
-
         File[] fileArray = directory.listFiles();
 
         if( num < 0 || num > fileArray.length || fileArray.length <= 0){
-
             System.out.println("INVALID INDEX");
             return;
         }
         else{
-
-
-            //File file = new File(directory, "JPEG_20180718_105716_724376777.jpg");
-
-
-
-            //File file = new File(directory, directory.listFiles()[num]);
             File file = directory.listFiles()[num];
-
-
-            System.out.println("DIRECTORY NAME IS: "+directory.listFiles()[num]);
-
-
-
-            System.out.println("IMAGE VIEW: " + mImageView);
-
-            System.out.println(file);
-
             if(file.exists()){
 
                 displayImage(mImageView,file);
-
-                //mImageView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
             }
-
         }
 
     }
 
     public void displayImage(ImageView imgView, File file){
 
-        imgView.setImageBitmap(BitmapFactory.decodeFile(file.getAbsolutePath()));
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+        if(bitmap.getWidth() > bitmap.getHeight()){ //portrait
+            bitmap = rotateImage(bitmap, 90);
+        }
+        imgView.setImageBitmap(bitmap);
 
     }
 
+
+
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
 
 }
