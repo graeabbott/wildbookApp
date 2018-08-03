@@ -17,6 +17,7 @@
         android:typeface="sans"
         android:textSize="20sp"
         android:textColor="#ffffff"
+        android:gravity="center"
         />
 
     <Button

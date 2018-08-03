@@ -332,7 +332,7 @@ public class AlbumFragment extends Fragment {
         //private Bitmap[] mThumbsIds2 = new Bitmap[3] ;
 
         private Bitmap[] mThumbsIds = {
-                displayImage1(retrieveFile1(0)),
+                displayImage1(retrieveFile1(5)),
          //       displayImage1(retrieveFile1(1))
         };
 

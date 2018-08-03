@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
     private int fileNumCounter = 0;
 
+
+    private FragmentManager fragManager = getSupportFragmentManager();
 //    public Fragment currentFragment = new HomeFragment();
 
    // Fragment selectedFragment = null;
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
             Fragment selectedFragment = null;
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            FragmentTransaction transaction = fragManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     selectedFragment = new HomeFragment();
@@ -371,6 +373,23 @@ public class MainActivity extends AppCompatActivity {
             file.delete();
 
         }
+
+//        BottomNavigationView bottomNavigationView;
+//        bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
+//        bottomNavigationView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//        FragmentManager.BackStackEntry backEntry = fragManager.getBackStackEntryAt(fragManager.getBackStackEntryCount() - 1);
+//        String tag = backEntry.getName();
+//        if(tag == "home") {
+//            bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+//        }
+//        else if(tag == "camera"){
+//            bottomNavigationView.setSelectedItemId(R.id.navigation_camera);
+//        }
+//        else{
+//            bottomNavigationView.setSelectedItemId(R.id.navigation_gallery);
+//        }
+
+
 
     }
 
