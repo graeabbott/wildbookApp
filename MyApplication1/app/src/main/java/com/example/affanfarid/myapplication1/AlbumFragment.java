@@ -44,8 +44,7 @@ public class AlbumFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick (AdapterView<?> parent, View view, int position, long id){
-                Toast.makeText(getActivity(), " " + position, Toast.LENGTH_SHORT).show();
-                //NEW Activity/Fragment popup goes here
+                galleryOnClick(position);
             }
 
         });
@@ -55,6 +54,12 @@ public class AlbumFragment extends Fragment {
 
         return v;
         //return inflater.inflate(R.layout.album_fragment, container, false);
+    }
+
+    public void galleryOnClick(int position){
+        Toast.makeText(getActivity(), " " + position, Toast.LENGTH_SHORT).show();
+        //NEW Activity/Fragment popup goes here
+
     }
 
 
@@ -80,6 +85,36 @@ public class AlbumFragment extends Fragment {
         }
 
     }
+
+    public File retrieveFile1( int num){
+
+        //ImageView mImageView = (ImageView) fragView.findViewById(R.id.thumbnail);
+
+        File sdCard = Environment.getExternalStorageDirectory();
+        File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
+        File[] fileArray = directory.listFiles();
+
+        if( num < 0 || num > fileArray.length || fileArray.length <= 0){
+            System.out.println("INVALID INDEX");
+            return null;
+        }
+        else{
+            File file = directory.listFiles()[num];
+            if(file.exists()){
+
+                return file;
+                //displayImage(mImageView,file);
+
+            }
+        }
+
+        return null;
+    }
+
+
+
+
+
 
     public void displayImage(ImageView imgView, File file){
 
@@ -141,6 +176,70 @@ public class AlbumFragment extends Fragment {
 
 
         imgView.setImageBitmap(bitmap);
+
+    }
+
+    public Bitmap displayImage1(File file){
+
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+
+        System.out.println("HEIGHT IS: "+ bitmap.getHeight());
+        System.out.println("WIDTH IS: "+ bitmap.getWidth());
+
+        System.out.println("ORIENTATION IS:" + getCameraPhotoOrientation(file));
+
+
+
+        switch (getCameraPhotoOrientation(file)){
+            case 0:
+                bitmap = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2 - bitmap.getHeight()/2, 0, bitmap.getHeight(), bitmap.getHeight());
+                break;
+            case 90:
+                bitmap = rotateImage(bitmap, 90);
+                //bitmap = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2 - bitmap.getHeight()/2, 0, bitmap.getHeight(), bitmap.getHeight());
+                bitmap = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight()/2 - bitmap.getWidth()/2, bitmap.getWidth(), bitmap.getWidth());
+                break;
+            case 180:
+                bitmap = rotateImage(bitmap, 180);
+                bitmap = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2 - bitmap.getHeight()/2, 0, bitmap.getHeight(), bitmap.getHeight());
+                break;
+
+            case 270:
+                bitmap = rotateImage(bitmap, 270);
+                //bitmap = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2 - bitmap.getHeight()/2, 0, bitmap.getHeight(), bitmap.getHeight());
+                bitmap = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight()/2 - bitmap.getWidth()/2, bitmap.getWidth(), bitmap.getWidth());
+                break;
+            default:
+                break;
+        }
+
+
+
+        if(bitmap.getWidth() > bitmap.getHeight()){
+
+            System.out.println("TEST1");
+
+            //bitmap = rotateImage(bitmap, 90);
+
+            bitmap = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2 - bitmap.getHeight()/2, 0, bitmap.getHeight(), bitmap.getHeight());
+
+
+            //bitmap = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight()/2 - bitmap.getWidth()/2, bitmap.getWidth(), bitmap.getWidth());
+
+        } else if(bitmap.getHeight() != bitmap.getWidth()){
+
+
+            //bitmap = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2 - bitmap.getHeight()/2, 0, bitmap.getHeight(), bitmap.getHeight());
+            bitmap = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight()/2 - bitmap.getWidth()/2, bitmap.getWidth(), bitmap.getWidth());
+
+            //bitmap = rotateImage(bitmap, 90);
+            System.out.println("TEST2");
+        }
+
+
+
+        return bitmap;
+        //imgView.setImageBitmap(bitmap);
 
     }
 
@@ -208,13 +307,19 @@ public class AlbumFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent){
 
             ImageView imageView = new ImageView(mContext);
-            imageView.setImageResource(mThumbsIds[position]);
+            //imageView.setImageResource(mThumbsIds[position]);
+            imageView.setImageBitmap(mThumbsIds[position]);
             return imageView;
 
         }
 
 
-        private Integer[] mThumbsIds = {
+        private Bitmap[] mThumbsIds = {
+                displayImage1(retrieveFile1(0)),
+                displayImage1(retrieveFile1(1))
+        };
+
+        private Integer[] mThumbsIds1 = {
                 R.drawable.ic_notifications_black_24dp,
                 R.drawable.ic_location_black_24dp
         };
