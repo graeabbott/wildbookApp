@@ -1,11 +1,13 @@
 package com.example.affanfarid.myapplication1;
 
 import android.Manifest;
+import android.app.ActionBar;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -138,6 +140,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //ActionBar bar = getActionBar();
+        //bar.setBackgroundDrawable(new ColorDrawable("#158CB8"));
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.wildbookBlue)));
+
+
+
 
         mTextMessage = (TextView) findViewById(R.id.message);
         //mImageView = (ImageView) findViewById(R.id.thumbnail);

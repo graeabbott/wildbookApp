@@ -42,13 +42,25 @@
         <!--app:itemIconTint="@android:color/white"-->
         <!--app:itemTextColor="@android:color/white"-->
         <!--app:menu="@menu/bottombar_menu"/>-->
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
+        android:background="#158CB8"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:itemIconTint="@color/bottom_nav_color"
         app:menu="@menu/navigation" />
+
+    <!--<android.support.design.widget.BottomNavigationView-->
+        <!--android:id="@+id/navigation"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="bottom"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="?android:attr/windowBackground"-->
+        <!--app:menu="@menu/navigation" />-->
 
 </RelativeLayout>

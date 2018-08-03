@@ -35,7 +35,7 @@
             android:verticalSpacing="5dp"
             android:gravity="center"
             android:stretchMode="columnWidth"
-            android:background="#800116">
+            android:background="#C4DDF7">
 
         </GridView>
 
