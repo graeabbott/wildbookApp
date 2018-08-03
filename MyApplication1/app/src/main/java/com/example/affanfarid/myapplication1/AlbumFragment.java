@@ -86,13 +86,15 @@ public class AlbumFragment extends Fragment {
 
     }
 
+    File sdCard = Environment.getExternalStorageDirectory();
+    File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
+    File[] fileArray = directory.listFiles();
+
     public File retrieveFile1( int num){
 
         //ImageView mImageView = (ImageView) fragView.findViewById(R.id.thumbnail);
 
-        File sdCard = Environment.getExternalStorageDirectory();
-        File directory = new File (sdCard.getAbsolutePath() + "/Android/data/com.example.affanfarid.myapplication1/files/Pictures/");
-        File[] fileArray = directory.listFiles();
+
 
         if( num < 0 || num > fileArray.length || fileArray.length <= 0){
             System.out.println("INVALID INDEX");
@@ -306,13 +308,28 @@ public class AlbumFragment extends Fragment {
 
         public View getView(int position, View convertView, ViewGroup parent){
 
+//            Bitmap[] mThumbsIds2 = new Bitmap[20];
+//
+//
+//            for (int i =0; i<fileArray.length-1; i++){
+//                mThumbsIds2[i]= displayImage1(retrieveFile1(i));
+//            }
+
+//            for (int i =0; i<2; i++){
+//                mThumbsIds2[i]= displayImage1(retrieveFile1(i));
+//            }
+
+
+
             ImageView imageView = new ImageView(mContext);
+            //DECREASE IMAGEVIEW SIZE?????
             //imageView.setImageResource(mThumbsIds[position]);
             imageView.setImageBitmap(mThumbsIds[position]);
             return imageView;
 
         }
 
+        //private Bitmap[] mThumbsIds2 = new Bitmap[3] ;
 
         private Bitmap[] mThumbsIds = {
                 displayImage1(retrieveFile1(0)),
