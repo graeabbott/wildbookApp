@@ -1,5 +1,6 @@
 package com.example.affanfarid.myapplication1;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -11,24 +12,49 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 
 
 public class AlbumFragment extends Fragment {
 
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        View v  = inflater.inflate(R.layout.album_fragment, container, false);
+
+
+//        for (int i = 0; i< 4; i++){
+//            retrieveFile(v,i);
+//
+//        }
+
+        GridView gridView = (GridView) v.findViewById(R.id.galleryGridView);
+        gridView.setAdapter(new ImageAdapter(getActivity()));
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id){
+                Toast.makeText(getActivity(), " " + position, Toast.LENGTH_SHORT).show();
+                //NEW Activity/Fragment popup goes here
+            }
+
+        });
 
 
 
 
-
-
-        return inflater.inflate(R.layout.album_fragment, container, false);
+        return v;
+        //return inflater.inflate(R.layout.album_fragment, container, false);
     }
 
 
@@ -48,7 +74,8 @@ public class AlbumFragment extends Fragment {
             File file = directory.listFiles()[num];
             if(file.exists()){
 
-                displayImage(mImageView,file);
+                //displayImage(mImageView,file);
+
             }
         }
 
@@ -158,6 +185,41 @@ public class AlbumFragment extends Fragment {
 
 
 
+    //@Override
+    public class ImageAdapter extends BaseAdapter{
+        private Context mContext;
+
+        public ImageAdapter(Context c){
+            mContext = c;
+        }
+
+        public int getCount(){
+            return mThumbsIds.length;
+        }
+
+        public Object getItem(int position){
+            return null;
+        }
+
+        public long getItemId(int position){
+            return 0;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent){
+
+            ImageView imageView = new ImageView(mContext);
+            imageView.setImageResource(mThumbsIds[position]);
+            return imageView;
+
+        }
+
+
+        private Integer[] mThumbsIds = {
+                R.drawable.ic_notifications_black_24dp,
+                R.drawable.ic_location_black_24dp
+        };
+
+    }
 
 
 }
