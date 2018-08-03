@@ -333,7 +333,7 @@ public class AlbumFragment extends Fragment {
 
         private Bitmap[] mThumbsIds = {
                 displayImage1(retrieveFile1(0)),
-                displayImage1(retrieveFile1(1))
+         //       displayImage1(retrieveFile1(1))
         };
 
         private Integer[] mThumbsIds1 = {

@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mTextMessage = (TextView) findViewById(R.id.message);
+        //mTextMessage = (TextView) findViewById(R.id.message);
         //mImageView = (ImageView) findViewById(R.id.thumbnail);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -360,6 +360,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 mImageView.setImageBitmap(imageBitmap);
+
             }
 
 
